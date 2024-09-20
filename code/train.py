@@ -18,17 +18,17 @@ from utils import (
 
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-BATCH_SIZE = 16
-NUM_EPOCHS = 3
+BATCH_SIZE = 32
+NUM_EPOCHS = 10
 NUM_WORKERS = 2
-IMAGE_HEIGHT = 128
-IMAGE_WIDTH = 128
+IMAGE_HEIGHT = 160
+IMAGE_WIDTH = 160
 PIN_MEMORY = True
 LOAD_MODEL = False
-TRAIN_IMG_DIR = ""
-TRAIN_MASK_DIR = ""
-VAL_IMG_DIR = ""
-VAL_MASK_DIR = ""
+TRAIN_IMG_DIR = "data/train_images/"
+TRAIN_MASK_DIR = "data/train_masks/"
+VAL_IMG_DIR = "data/val_images/"
+VAL_MASK_DIR = "data/val_masks/"
 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
@@ -55,9 +55,9 @@ def main():
     train_transforms = A.Compose(
         [
             A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
-            # A.Rotate(limit=35, p=1.0),
-            # A.HorizontalFlip(p=0.5),
-            # A.VerticalFlip(p=0.1),
+            A.Rotate(limit=35, p=1.0),
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.1),
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
@@ -79,7 +79,7 @@ def main():
         ]
     )
 
-    model = UNET(in_channels=1, out_channels=1).to(DEVICE)
+    model = UNET(in_channels=3, out_channels=1).to(DEVICE)
     loss_fn = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
