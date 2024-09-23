@@ -25,10 +25,10 @@ IMAGE_HEIGHT = 160
 IMAGE_WIDTH = 160
 PIN_MEMORY = True
 LOAD_MODEL = False
-TRAIN_IMG_DIR = "data/train_images/"
-TRAIN_MASK_DIR = "data/train_masks/"
-VAL_IMG_DIR = "data/val_images/"
-VAL_MASK_DIR = "data/val_masks/"
+TRAIN_IMG_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\train_images"
+TRAIN_MASK_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\train_masks"
+VAL_IMG_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\val_images"
+VAL_MASK_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\val_masks"
 
 def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
