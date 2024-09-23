@@ -25,10 +25,11 @@ IMAGE_HEIGHT = 160
 IMAGE_WIDTH = 160
 PIN_MEMORY = True
 LOAD_MODEL = True
-VAL_IMG_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\val_images" 
-VAL_MASK_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\val_masks"
-TEST_IMG_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_images"
-TEST_MASK_DIR = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_masks"
+TEST_IMG_DIR_1 = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_images_subject_1"
+TEST_MASK_DIR_1 = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_masks_subject_1"
+TEST_IMG_DIR_2 = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_images_subject_2"
+TEST_MASK_DIR_2 = "c:\\Users\\maxime\\Documents\\Datasets\\human-bounding-box-from-depth-dataset\\test_masks_subject_2"
+
 
 def main():
     test_transforms = A.Compose(
@@ -46,11 +47,11 @@ def main():
     model = UNET(in_channels=3, out_channels=1).to(DEVICE)
 
     # Get the loaders of val and test data, but only use the test loader
-    val_loader, test_loader = get_loaders(
-        VAL_IMG_DIR,
-        VAL_MASK_DIR,
-        VAL_IMG_DIR,
-        VAL_MASK_DIR,
+    test_loader_1, test_loader_2 = get_loaders(
+        TEST_IMG_DIR_1,
+        TEST_MASK_DIR_1,
+        TEST_IMG_DIR_2,
+        TEST_MASK_DIR_2,
         BATCH_SIZE,
         test_transforms,
         test_transforms,
@@ -63,12 +64,16 @@ def main():
         load_checkpoint(checkpoint, model)
         
     # check accuracy
-    check_accuracy(test_loader, model, device=DEVICE)
+    check_accuracy(test_loader_1, model, device=DEVICE)
+    #check_accuracy(test_loader_2, model, device=DEVICE)
 
     # print some examples to a folder
     save_predictions_as_imgs(
-        test_loader, model, folder="inference_images/", device=DEVICE
+        test_loader_1, model, folder="inference_images_subject_1/", device=DEVICE
     )
+    #save_predictions_as_imgs(
+    #    test_loader_2, model, folder="inference_images_subject_2/", device=DEVICE
+    #)
 
 if __name__ == "__main__":
     main()
